@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Apply for Loan{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card p-4">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <i class="bi bi-wallet2 fs-1 text-primary"></i>
+                    <h2 class="mt-2">Loan Application</h2>
+                    <p class="text-muted">Complete the form below to apply for a loan.</p>
+                </div>
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.amount.label(class="form-label") }}
+                            {{ form.amount(class="form-select", id="amount-select") }}
+                        </div>
+                        <div class="col-md-6 align-self-end" id="custom-amount-group" style="display:none;">
+                            {{ form.custom_amount(class="form-control", placeholder="Enter Custom Amount") }}
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            {{ form.purpose.label(class="form-label") }}
+                            {{ form.purpose(class="form-select", id="purpose-select") }}
+                        </div>
+                        <div class="col-md-6 align-self-end" id="custom-purpose-group" style="display:none;">
+                            {{ form.custom_purpose(class="form-control", placeholder="Enter Custom Purpose") }}
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Your existing script for toggling custom fields remains the same
+    const amountSelect = document.getElementById('amount-select');
+    const customAmountGroup = document.getElementById('custom-amount-group');
+    const purposeSelect = document.getElementById('purpose-select');
+    const customPurposeGroup = document.getElementById('custom-purpose-group');
+
+    function toggleCustomAmount() {
+        customAmountGroup.style.display = amountSelect.value === 'other' ? 'block' : 'none';
+    }
+    function toggleCustomPurpose() {
+        customPurposeGroup.style.display = purposeSelect.value === 'other' ? 'block' : 'none';
+    }
+
+    amountSelect.addEventListener('change', toggleCustomAmount);
+    purposeSelect.addEventListener('change', toggleCustomPurpose);
+
+    // Initial check
+    toggleCustomAmount();
+    toggleCustomPurpose();
+</script>
+{% endblock %} 

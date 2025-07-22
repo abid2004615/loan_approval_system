@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2">Admin Dashboard</h1>
+</div>
+<div class="card p-4">
+    <div class="card-body">
+        <h5 class="card-title mb-3">All Loan Applications</h5>
+        {% if applications %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">Applicant</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Purpose</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for app in applications %}
+                        <tr>
+                            <td>{{ app.user.username }}</td>
+                            <td>{{ app.created_at.strftime('%b %d, %Y') }}</td>
+                            <td>₹{{ "%.2f"|format(app.amount) }}</td>
+                            <td>{{ app.purpose }}</td>
+                            <td>
+                                {% if app.status == 'Approved' %}
+                                    <span class="badge bg-success">Approved</span>
+                                {% elif app.status == 'Rejected' %}
+                                    <span class="badge bg-danger">Rejected</span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                {% if app.status == 'Pending' %}
+                                <form action="{{ url_for('approve_application', application_id=app.id) }}" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        <i class="bi bi-check-lg"></i> Approve
+                                    </button>
+                                </form>
+                                <form action="{{ url_for('reject_application', application_id=app.id) }}" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-x-lg"></i> Reject
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center p-4">
+                <p>No loan applications to review at this time.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 
